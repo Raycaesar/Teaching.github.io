@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+<!-- The first div that responds to mouse over and out events -->
+<div onmouseover="mOver(this)" onmouseout="mOut(this)" 
+style="background-color:#D94A38;width:120px;height:20px;padding:40px;">
+Mouse Over Me</div>
+
+<!-- The second div that responds to mouse down and up events -->
+<div onmousedown="mDown(this)" onmouseup="mUp(this)"
+style="background-color:#D94A38;width:90px;height:20px;padding:40px;">
+Click Me</div>
+
+<script>
+  // Function to handle the mouse over event for the first div
+  function mOver(obj) {
+    // Change the text inside the div to "Thank You"
+    obj.innerHTML = "Thank You";
+  }
+
+  // Function to handle the mouse out event for the first div
+  function mOut(obj) {
+    // Reset the text inside the div to "Mouse Over Me"
+    obj.innerHTML = "Mouse Over Me";
+  }
+
+  // Function to handle the mouse down event for the second div
+  function mDown(obj) {
+    // Change the background color of the div to blue
+    obj.style.backgroundColor = "#1ec5e5";
+    // Change the text inside the div to "Release Me"
+    obj.innerHTML = "Release Me";
+  }
+
+  // Function to handle the mouse up event for the second div
+  function mUp(obj) {
+    // Reset the background color of the div to red
+    obj.style.backgroundColor="#D94A38";
+    // Change the text inside the div to "Thank You"
+    obj.innerHTML="Thank You";
+  }
+</script>
+
+
+</body>
+</html> 

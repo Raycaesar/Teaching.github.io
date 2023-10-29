@@ -1,0 +1,54 @@
+<canvas id="canvas" width="600" height="400">
+  Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<style>
+#canvas {
+  width: 70%;
+  border: 1px solid black;
+ }
+</style>
+
+<script>
+// When the window loads, the contained function will execute
+window.onload = function() {
+    
+    // Getting the canvas element from the DOM
+    var canvas = document.getElementById("canvas");
+    
+    // Getting a 2D drawing context for the canvas
+    var context = canvas.getContext("2d");
+    
+    // Initial x and y position where the rectangle will be drawn
+    var x = 0;
+    var y = 100;
+    
+    // This function is responsible for drawing a rectangle on the canvas
+    function draw() {
+        
+        // Start creating a new path on the canvas
+        context.beginPath();
+        
+        // Define the rectangle's x, y position, and its width and height
+        context.rect(x, y, 100, 100);
+        
+        // Set the fill color for the rectangle to red
+        context.fillStyle="red";
+        
+        // Fill the rectangle with the specified color
+        context.fill();
+
+        // Increase the x position for the next draw
+        x += 10;
+        
+        // If the rectangle goes out of the 600px boundary, reset its x position to the left side
+        if (x >= 600) {
+            x = -100;
+        }
+    }
+    
+    // This will call the draw function every 50ms
+    setInterval(draw, 50);
+}
+
+</script>

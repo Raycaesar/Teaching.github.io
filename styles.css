@@ -1,0 +1,13 @@
+#drawingCanvas {
+    border: 2px solid black;
+}
+
+#svgOutput {
+    margin-top: 20px;
+    border: 1px dashed gray;
+}
+
+#toolbar {
+    margin-bottom: 10px;
+}
+

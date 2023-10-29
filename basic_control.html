@@ -1,0 +1,124 @@
+<html>
+<head>
+<!-- Styling for the canvas and button elements -->
+<style>
+    /* Styling for the canvas */
+    #canvas {
+        width: 50%;
+        border: 1px solid black;
+    }
+
+    /* Styling for the buttons */
+    button {
+        width: 50px;
+        height: 30px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<!-- The body contains the canvas and the movement buttons -->
+<body>
+
+    <!-- HTML5 canvas element. If the browser doesn't support it, it will show the provided message. -->
+    <canvas id="canvas" width="600" height="400">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+
+    <!-- Navigation buttons for the rectangle drawn on the canvas -->
+    <div align="center">
+        <button id="up">↑</button><br />
+        <button id="left">←</button>
+        <button id="down">↓</button>
+        <button id="right">→</button>
+    </div>
+
+    <script>
+        // Script runs when the window loads
+        window.onload = function() {
+            // Canvas and its context are initialized
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+
+            // Initial positions for the rectangle on the canvas
+            var x = 0;
+            var y = 100;
+
+            var t = Date.now(); // Current time
+            let speed = 300;    // Movement speed of the rectangle
+            let dir = 0;        // Direction of movement (0 means no movement)
+
+            // Buttons are accessed via their IDs
+            let up = document.getElementById('up');
+            let down = document.getElementById('down');
+            let left = document.getElementById('left');
+            let right = document.getElementById('right');
+
+            // Event handlers to set the direction when each button is pressed or touched
+            up.onmousedown = function() { dir = 4;}
+            down.onmousedown = function() { dir = 3;}
+            left.onmousedown = function() { dir = 2;}
+            right.onmousedown = function() { dir = 1;}
+
+            up.ontouchstart = function() { dir = 4;}
+            down.ontouchstart = function() { dir = 3;}
+            left.ontouchstart = function() { dir = 2;}
+            right.ontouchstart = function() { dir = 1;}
+
+            // Event handlers to stop the movement when each button is released or touch ends
+            up.onmouseup = function() { dir = 0;}
+            down.onmouseup = function() { dir = 0;}
+            left.onmouseup = function() { dir = 0;}
+            right.onmouseup = function() { dir = 0;}
+
+            up.ontouchend = function() { dir = 0;}
+            down.ontouchend = function() { dir = 0;}
+            left.ontouchend = function() { dir = 0;}
+            right.ontouchend = function() { dir = 0;}
+
+            // The draw function is responsible for animating the canvas content
+            function draw() {
+                // Calculating frame rate (fps)
+                var timePassed = (Date.now() - t) / 1000;
+                t = Date.now();
+                var fps = Math.round(1 / timePassed);
+
+                // Clear the canvas
+                context.clearRect(0, 0, 600, 400);
+
+                // Draw the fps on the canvas
+                context.font = '25px Arial';
+                context.fillStyle = 'black';
+                context.fillText("FPS: " + fps, 20, 30);
+
+                // Draw the rectangle on the canvas
+                context.beginPath();
+                context.rect(x, y, 100, 100);
+                context.fillStyle = "red";
+                context.fill();
+
+                // Update the position of the rectangle based on the direction
+                if(dir == 1) { x += (speed * timePassed); }  
+                else if(dir == 2) { x -= (speed * timePassed); }
+                else if(dir == 3) { y += (speed * timePassed); }
+                else if(dir == 4) { y -= (speed * timePassed); } 
+
+                // Conditions to reset the direction if rectangle goes beyond the canvas bounds
+                if(x > 500 || x < 0) { dir = 0; }
+
+                // Special conditions for Y, making the rectangle reappear from the opposite edge
+                if(y > 450) { y = -100; } 
+                if(y < -150) { y = 400; }
+
+                // Request the next animation frame, recursively calling draw
+                window.requestAnimationFrame(draw);
+            }
+            
+            // Initial call to start the drawing loop
+            draw();
+        }
+    </script>
+</body>
+
+
+</body>
+</html>

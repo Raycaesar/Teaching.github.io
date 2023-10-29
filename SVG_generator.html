@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Drawing App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="toolbar">
+        <input type="color" id="colorPicker" value="#000000">
+        <button id="textTool">Text Tool</button>
+        <select id="fontSelector">
+    <option value="Arial">Arial</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <!-- Add other fonts as required -->
+</select>
+<input type="number" id="fontSize" value="16" min="8" max="72"> 
+
+<input type="color" id="fillColorPicker" value="#FFFFFF">
+
+    </div>
+    <canvas id="drawingCanvas" width="1200" height="600"></canvas>
+    <button id="generateSVG">Generate SVG</button>
+    <button id="downloadSVG">Download SVG</button>
+    <div id="svgOutput"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

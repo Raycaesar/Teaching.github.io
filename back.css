@@ -1,0 +1,91 @@
+body {
+background-color: grey;
+overflow-x: hidden;
+	
+}
+*{
+	padding: 0;
+	margin: 0;
+	
+}
+nav{
+	background-color: red;
+	height: 10vh;
+	position: fixed;
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	align-items: center;
+	
+}
+.nav-logo{
+	color: white;
+	letter-spacing: 4px;
+}
+.nav-logo span{
+	transition: all 0.5s ease;
+}
+.nav-logo span:hover{
+	color: black;
+}
+.nav-menu div{
+	width: 25px;
+	height: 2px;
+	margin: 5px;
+	background-color: white;
+	transition: all 0.5s ease-in;
+}
+.nav-list{
+	height: 90vh;
+	width: 100%;
+	background-color: black;
+	top: 8vh;
+	right: 0;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	transition: all 0.5s;
+	transform: translateX(100%);
+}
+.nav-list li{
+	opacity: 1;
+	list-style: none;
+}
+.nav-active{
+	transform: translateX(0%);
+}
+.nav-list li a{
+	text-decoration: none;
+	color: white;
+	font-weight: bolder;
+	font-size: 18px;
+	letter-spacing: 5px;
+	transition: all 0.9s ease;
+}
+.nav-list li a:hover{
+background-color: red;
+}
+@keyframes linkFade {
+	from {
+		opacity: 0;
+		transform: translateX(100%);
+	}
+	to{
+		opacity: 1;
+		transform: translateX(0%);
+	}
+}
+.toggle .line1{
+transform: rotate(45deg) translate(-5px, 12px);
+	
+}
+.toggle .line2{
+opacity: 0;
+	
+}
+.toggle .line3{
+transform: rotate(-45deg) translate(-5px, -12px);
+	
+}
