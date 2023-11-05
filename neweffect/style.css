@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+#canvas1{
+    background: black;
+    position: absolute;
+    top: 15%;
+    left: 15%;
+}
+
+.edward{
+    font-family: fantasy;
+    font-size: xx-large;
+    color: cyan;
+    background-color: salmon;
+}
