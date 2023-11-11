@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#canvas1 {
+    background: radial-gradient(rgb(153, 153, 228),rgb(78, 78, 210), rgb(35, 35, 220),navy, black);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
