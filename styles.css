@@ -10,4 +10,13 @@
 #toolbar {
     margin-bottom: 10px;
 }
+.nav-list {
+    display: flex;
+    justify-content: center; /* Adjust as needed */
+    align-items: center; /* Adjust as needed */
+}
 
+.nav-column {
+    margin-right: 20px; /* Space between columns */
+    /* Additional styling here if needed */
+}
