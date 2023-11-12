@@ -10,24 +10,6 @@
 #toolbar {
     margin-bottom: 10px;
 }
-.nav-list {
-    display: flex; /* Makes nav-list a flex container */
-    justify-content: space-around; /* Spreads the columns evenly */
-    align-items: center; /* Aligns items vertically in the center */
-    list-style: none; /* Removes default list styling */
-    padding: 0; /* Removes default padding */
-}
-
-.nav-list .nav-column {
-    display: inline-block; /* Aligns items of each column */
-    margin-right: 20px; /* Adjust the space between columns if needed */
-    /* Add additional styling as needed */
-}
-
-/* Style for each list item */
-.nav-list .nav-column li {
-    /* Add styling for list items here if needed */
-}
 
 
 
