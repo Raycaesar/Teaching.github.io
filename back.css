@@ -9,7 +9,7 @@ overflow-x: hidden;
 	
 }
 nav{
-	background-color: red;
+	background-color: rgb(55, 82, 163);
 	height: 10vh;
 	position: fixed;
 	display: flex;
@@ -18,16 +18,6 @@ nav{
 	align-items: center;
 	
 }
-
-
-.nav-list .nav-column {
-    display: inline-block; /* Aligns items of each column */
-    margin-right: 20px; /* Adjust the space between columns if needed */
-    /* Add additional styling as needed */
-}
-
-
-
 .nav-logo{
 	color: white;
 	letter-spacing: 4px;
@@ -46,6 +36,11 @@ nav{
 	transition: all 0.5s ease-in;
 }
 .nav-list{
+
+	flex-direction: row; /* Align children in a row */
+    justify-content: center; /* Center the columns horizontally */
+    align-items: center; /* Align the columns vertically in the center */
+
 	height: 90vh;
 	width: 100%;
 	background-color: black;
@@ -53,15 +48,26 @@ nav{
 	right: 0;
 	position: absolute;
 	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
+	
 	transition: all 0.5s;
 	transform: translateX(100%);
+	
+   
+    list-style: none; /* Removes default list styling */
+    padding: 0; /* Removes default padding */
+}
+
+.nav-column {
+    display: flex; /* Makes each column a flex container */
+    flex-direction: column; /* Align items in the column vertically */
+    align-items: flex-start; /* Aligns items to the start of the column */
+    margin-right: 20px; /* Space between the two columns */
 }
 .nav-list li{
 	opacity: 1;
-	list-style: none;
+	list-style: none; 
+	margin-bottom: 10px; /* Adds space between each link */
+	
 }
 .nav-active{
 	transform: translateX(0%);
@@ -99,3 +105,6 @@ opacity: 0;
 transform: rotate(-45deg) translate(-5px, -12px);
 	
 }
+
+
+
