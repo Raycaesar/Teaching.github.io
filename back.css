@@ -18,6 +18,16 @@ nav{
 	align-items: center;
 	
 }
+
+
+.nav-list .nav-column {
+    display: inline-block; /* Aligns items of each column */
+    margin-right: 20px; /* Adjust the space between columns if needed */
+    /* Add additional styling as needed */
+}
+
+
+
 .nav-logo{
 	color: white;
 	letter-spacing: 4px;
