@@ -87,6 +87,7 @@ class Player {
     this.image.src = "fighter.png";
     this.image1 = new Image();
     this.image1.src = "fighter1.png";
+    this.canvas = canvas;
   
   
       document.addEventListener("keydown", this.keydown);
@@ -118,19 +119,31 @@ class Player {
   
     move() {
       if (this.downPressed) {
-        this.y += this.speed;
+          // Check if moving down would go past the bottom boundary
+          if (this.y + this.height * 1.5 + this.speed <= this.canvas.height) {
+              this.y += this.speed;
+          }
       }
       if (this.upPressed) {
-        this.y -= this.speed;
+          // Check if moving up would go past the top boundary
+          if (this.y - this.speed >= 0) {
+              this.y -= this.speed;
+          }
       }
       if (this.leftPressed) {
-        this.x -= this.speed;
+          // Check if moving left would go past the left boundary
+          if (this.x - this.speed >= 0) {
+              this.x -= this.speed;
+          }
       }
-  
       if (this.rightPressed) {
-        this.x += this.speed;
+          // Check if moving right would go past the right boundary
+          if (this.x + this.width * 2 + this.speed <= this.canvas.width) {
+              this.x += this.speed;
+          }
       }
-    }
+  }
+  
     collideWith(particle) {
         // Adjusted dimensions to better match the visual representation
         const adjustedWidth = this.width * 1.2;
@@ -286,7 +299,7 @@ class Effect {
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.particles = [];
-        this.numberOfParticles = 200;
+        this.numberOfParticles = 300;
         this.createParticles();
         this.score = 0;
     
