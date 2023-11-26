@@ -32,13 +32,17 @@ export class Explosion{
         }
 
     }
-    reset(){
+    reset() {
         this.free = true;
+        this.frameX = 0;
+        // Reset other necessary properties
     }
+   
     start(x, y) {
         this.free = false;
         this.x = x;
         this.y = y;
+        // Initialize other necessary properties
     }
     
 }

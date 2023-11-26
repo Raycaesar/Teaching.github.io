@@ -100,7 +100,7 @@ class Player {
         let currentImage = this.isMoving() ? this.image1:this.image ;
         ctx.drawImage(currentImage, this.x, this.y, this.width * 2, this.height * 1.5);
         ctx.strokeStyle = "yellow";
-      ctx.strokeRect(this.x+20, this.y, this.width*1.2, this.height*1.5);
+      //ctx.strokeRect(this.x+20, this.y, this.width*1.2, this.height*1.5);
         this.shoot();
     }
     isMoving() {
@@ -267,10 +267,12 @@ class Particle {
         this.x += this.vx;
         this.y += this.vy;
 
-        if (this.radius > this.maxRadius) {
-          this.startExplosion(); // new to make explosion effect
-          this.toBeRemoved = true; // Mark for removal
-      }
+      
+      if (this.radius > this.maxRadius && !this.isExploding) {
+        this.startExplosion();
+        this.isExploding = true; // Mark as exploding
+        this.toBeRemoved = true;
+    }
         
        if (this.x < this.radius){
             this.x = this.radius;
@@ -305,6 +307,7 @@ class Particle {
 
 
 
+
 class Effect {
     constructor(canvas, context){
         this.canvas = canvas;
@@ -312,15 +315,16 @@ class Effect {
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.particles = [];
-        this.numberOfParticles = 100;
+        this.numberOfParticles = 10;
         this.createParticles();
         this.score = 0;
         this.explosions = [];
-        for (let i = 0; i < 10; i++) { // Adjust the number based on expected max concurrent explosions
+        for (let i = 0; i < 10; i++) { // Increase this number as needed
             this.explosions.push(new Explosion(this));
         }
-  
-    }
+        }
+
+    
     createParticles(){
         for (let i = 0; i < this.numberOfParticles; i++){
             this.particles.push(new Particle(this, i));
