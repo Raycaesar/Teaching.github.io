@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <title>Battle</title>
+  <style>
+    /* CSS styles */
+    body {background-color: silver;
+      
+    font-family: 'MedievalSharp', cursive;}
+    /* Define styles for the main container */
+    #app {
+      border: dashed black 1px;
+      width: 1200px;
+      padding: 10px;
+      display: flex;
+      justify-content: flex-start;
+    }
+    /* Style for the image */
+    #app #Orc {
+      width: 650px;
+      padding: 20px;
+      transition: filter 0.5s; /* Add transition effect for filter property */
+    }
+    /* Style for the weapon image */
+    .weapon {
+      width: 150px; 
+      height: 200px;
+      margin-right: 5px;
+    }
+    /* Style for the dialogue container */
+    .dialogue {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      font-weight: 200;
+      font-style: normal;
+      font-size: x-large;
+    }
+    .orc{
+        color: crimson;
+        font-size: xx-large;
+        font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+    <h1>Battle</h1>
+    
+<div id="app">
+   
+  <img src="https://cdn.midjourney.com/999da7c8-4efb-468a-8938-c15259728f64/0_1.webp" id="Orc" v-on:click.ctrl="attackOrc" v-on:click="showText" width="650" height="800">
+
+  <div class="dialogue"> 
+    <p class = "orc">{{ msg }}</p>
+    <!-- Message container with Vue.js data binding -->
+    <p >You join in the battle and an Orc is approaching you. Select your weapon by right-clicking and pressing Ctrl.</p>
+    <!-- Display the selected weapon image -->
+    <img class="weapon" v-bind:src="selectedWeapon.src" v-on:contextmenu.ctrl.prevent="changeWeapon" v-bind:key="selectedWeapon.name">
+    <!-- Display the name of the selected weapon -->
+    <p v-if="selectedWeapon">Current Weapon: {{ selectedWeapon.name }}</p>
+    <p >Attack the orc by clicking it and pressing Ctrl.</p>
+    <!-- Display player's health -->
+    <p>Player Health: {{ playerHealth }}</p>
+    <!-- Display Orc's health -->
+    <p>Orc Health: {{ orcHealth }}</p>
+
+  
+</div>
+</div>
+<!-- Vue.js script -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  // Vue.js application instance
+  const app = Vue.createApp({
+    // Data object containing reactive properties
+    data() {
+        return {
+            msg: 'Click the Orc', 
+            Text: "Orc: You dare to block my way, puny human?",
+            v_Text: "Orc: This is impossible! How could I fall to a weak human?",
+            z_Text: "Orc: You, bastard! I will never bend my knee!",
+            y_Text: "Orc: You hurt me... Now witness my true power!",
+            x_Text: "Orc: So many paths in life, yet you chose this futile end, fool!",
+            selectedWeaponIndex: 0,
+            weapons: [{
+                    name: 'Sword',
+                    src: 'https://cdn.midjourney.com/65e2dcde-4b72-482e-add8-80302466185e/0_0.webp',
+                    damage: 20,
+                    defense: 10
+                },
+                {
+                    name: 'Shield',
+                    src: 'https://cdn.midjourney.com/484a0376-efc1-41be-ade6-aa53c1491cbf/0_1.webp',
+                    damage: 5,
+                    defense: 18
+                },
+                {
+                    name: 'Javelin',
+                    src: 'https://cdn.midjourney.com/f88828a4-b49e-4d75-811e-d1fa5466216e/0_0.webp',
+                    damage: 30,
+                    defense: 5
+                }
+            ], 
+            playerHealth: 70, // Initial player health
+            orcHealth: 90, // Initial Orc health
+            orcWeak: false,
+
+        }
+    },
+
+    methods: {
+        // Method to handle click event on the Orc image
+        attackOrc() {
+            const weapon = this.weapons[this.selectedWeaponIndex];
+
+
+            if (!this.orcWeak) {
+                const hurt = Math.floor(Math.random() * weapon.damage) + 5;
+                // Apply damage to Orc, taking into account player's weapon defense
+                this.orcHealth -= hurt;
+                // Show attack alert
+                alert(`You attacked the Orc with ${weapon.name}!, the Orc lost ${hurt} health`);
+            }
+
+            // Check if the Orc's health drops to 0 or below
+            if (this.orcHealth <= 0 && !this.orcWeak) {
+                // Show defeat alert if Orc is defeated
+                alert("The Orc is weak! Finish him!");
+                this.orcWeak = true;
+                this.orcHealth = 0;
+
+            } else if (this.orcWeak) {
+                if (this.selectedWeaponIndex === 2) {
+                    alert(`You killed the Orc`);
+                    this.changeBackground();
+                } else {
+                    alert(`The Orc's body is too resilient; our weapons cannot pierce it.`);
+                }
+            } else {
+                // Apply Orc's attack (for demonstration purposes)
+                this.orcAttack();
+            }
+        },
+
+        // Method to simulate Orc's attack (for demonstration purposes)
+        orcAttack() {
+            const weapon = this.weapons[this.selectedWeaponIndex];
+            const damage = Math.floor(Math.random() * 10) + 20; // Random damage between 20 to 30
+            // Apply damage to player, taking into account the current weapon's defense
+            this.playerHealth -= Math.max(0, damage - weapon.defense);
+            // Show Orc's attack alert
+            alert(`The Orc attacked you with ${damage - weapon.defense} damage!`);
+
+            // Check if player's health drops to 0
+            if (this.playerHealth <= 0) {
+                // Show defeat alert if player is defeated
+                alert("You have fallen to the might of the Orc!");
+                // Reset player's health
+                this.playerHealth = 0;
+                this.changeBackground();
+            }
+        },
+
+        // Method to change the weapon
+        changeWeapon(event) {
+            // Prevent the default context menu
+            event.preventDefault();
+            // Increment the selected weapon index
+            this.selectedWeaponIndex = (this.selectedWeaponIndex + 1) % this.weapons.length;
+        },
+
+    /* 
+    
+    this.selectedWeaponIndex++;
+    if(this.selectedWeaponIndex>=3){
+          this.selectedWeaponIndex =0
+        }
+        
+      */
+
+        changeBackground() {
+            const appContainer = document.getElementById('app');
+            const elements = appContainer.querySelectorAll('*');
+            elements.forEach(element => {
+                element.style.display = 'none';
+            });
+
+            // Change the background
+            if(this.orcWeak){
+                document.body.style.backgroundImage = 'url("https://cdn.midjourney.com/4014c2c4-7dba-4a0c-825a-170b8264c25b/0_0.webp")';
+            }
+            else{
+                document.body.style.backgroundImage = 'url("https://cdn.midjourney.com/89c4644b-b775-4897-b524-710901248248/0_3.webp")';
+            }
+            document.body.style.backgroundSize = 'cover';
+        },
+
+        // Method to display text when Orc image is clicked
+        showText() {
+            if (this.orcHealth <= 0) {
+                this.msg = this.v_Text;
+            } else if (this.orcHealth < 65 && this.orcHealth >= 40) {
+                this.msg = this.x_Text;
+            } 
+            else if (this.orcHealth < 40 && this.orcHealth >= 15) {
+                this.msg = this.y_Text;
+            }
+            else if (this.orcHealth < 15 && this.orcHealth > 0) {
+                this.msg = this.z_Text;
+            }
+            else {
+                this.msg = this.Text;
+            }
+        }
+    },
+    computed: {
+        // Computed property to get the currently selected weapon
+        selectedWeapon() {
+            return this.weapons[this.selectedWeaponIndex];
+        }
+    }
+});
+
+app.mount('#app');
+</script>
+
+</body>
+</html>

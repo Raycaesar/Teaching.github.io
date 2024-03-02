@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Heros</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #423342;
+      font-family: 'MedievalSharp', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-weight: 400;
+      font-style: normal;
+      font-size: xx-large;
+    }
+
+    #app {
+      border: 2px solid #8b4513;
+      border-radius: 15px;
+      padding: 20px;
+      background-color: #f5deb3;
+      width: 1000px;
+
+    }
+
+    #hero-selection {
+      margin-bottom: 20px;
+    }
+
+    #hero-selection ol {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #hero-selection li {
+      padding: 10px;
+      border-radius: 10px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      background-color: #deb887;
+      transition: all 0.3s ease;
+      font-size: large;
+      font-weight: 500;
+    }
+
+    #hero-description {
+      padding: 20px;
+      background-color: #ffe4b5;
+      border: 2px solid #8b4513;
+      border-radius: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: large;
+    }
+
+    #hero-description p {
+      margin: 0;
+    }
+
+    #app > img {
+      width: 50%;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    h1 {
+      color: azure;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Select Your Hero</h1>
+
+<div id="app">
+  <div id="hero-selection">
+    <ol>
+      <li v-for="hero in heros" v-on:click="showHero(hero)">
+        {{ hero.name }}
+      </li>
+    </ol>
+  </div>
+  <img v-bind:src="imgUrl" v-on:mouseover="playAttackAnimation" v-on:mouseout="stopAttackAnimation" v-on:click="showDescription">
+  <div id="hero-description">
+    <p>{{ heroDescription }}</p>
+  </div>
+</div>
+  
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        imgUrl: 'slime.gif',
+        currentHero: null,
+        heros: [
+          {name: 'hammer', url: 'hammer.png', ani: 'hammer_attack.gif', description: "Hammer is a mighty warrior known for his brute strength and unwavering courage."},
+          {name: 'minotaur', url: 'minotaur.png', ani: 'minotaur_attack.gif', description: "Minotaur, with his imposing presence and formidable horns, strikes fear into the hearts of his enemies."},
+          {name: 'ranger', url: 'ranger.png', ani: 'ranger_attack.gif', description: "Ranger is a skilled marksman, adept at taking down enemies from afar with precision and stealth."},
+          {name: 'warrior', url: 'warrior.png', ani: 'warrior_attack.gif', description: "Warrior is a battle-hardened fighter, wielding his sword with expert skill on the front lines of combat."}
+        ],
+        heroDescription: ''
+      }
+    },
+    methods: {
+      showHero(hero) {
+        this.currentHero = hero;
+        this.imgUrl = hero.url;
+        this.heroDescription = '';
+      },
+      playAttackAnimation() {
+        if (this.currentHero) {
+          this.imgUrl = this.currentHero.ani;
+        }
+      },
+      stopAttackAnimation() {
+        if (this.currentHero) {
+          this.imgUrl = this.currentHero.url;
+        }
+      },
+      showDescription() {
+        if (this.currentHero) {
+          this.heroDescription = this.currentHero.description;
+        }
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cafe Menu</title>
+  <style>
+    #app {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      border: solid 5px #f9e4b7; /* Light brown border */
+      width: 80%; /* Adjust the width */
+      padding: 20px;
+      font-weight: bold;
+      background-color: #f3e5ab; /* Light yellow background */
+      border-radius: 20px; /* Rounded corners */
+    }
+    .food-item {
+      margin: 10px;
+      text-align: center;
+    }
+    .food-image {
+      width: 100px; /* Adjust the image width */
+      height: 100px; /* Adjust the image height */
+      border-radius: 50%; /* Make the image round */
+    }
+    .food-name {
+      margin-top: 5px;
+      font-size: 14px; /* Adjust the font size */
+    }
+
+    p {
+      margin-top: 10px;
+      font-size: 18px; /* Adjust the font size */
+      color: #593f1c; /* Dark brown text color */
+    }
+    img {
+      width: 100%;
+    }
+    .smaller-img {
+      width: 50px; 
+      height: 50px; 
+    }
+    
+    .enjoy {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      width: 100%; 
+    }
+    
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <div class="food-item" v-for="(food, index) in manyFoods" :key="index">
+    <img class="food-image" v-bind:src="food.url">
+    <p class="food-name">{{ food.name }}</p>
+  </div>
+
+  <div class="enjoy">
+    <div v-if="style.includes('US')" class="food-item">
+      <p>Please enjoy your Burger</p>
+      <img class="smaller-img" src="Burger.png">
+    </div>
+    
+    <div v-else-if="style.includes('Italy')" class="food-item">
+      <p>Please enjoy your Pizza</p>
+      <img class="smaller-img" src="Pizza.png">
+    </div>
+    
+    <div v-else class="food-item">
+      <p>Please enjoy your Sushi</p>
+      <img class="smaller-img" src="Sushi.png">
+    </div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<script>
+const app = Vue.createApp({
+  data() {
+    return {
+      manyFoods: [
+        {name: 'Burger', url: 'Burger.png'},
+        {name: 'Pizza', url: 'Pizza.png'},
+        {name: 'Sushi', url: 'Sushi.png'}
+      ],
+      style: "Our guest prefers food from the US"
+    }
+  }
+});
+
+app.mount('#app');
+</script>
+
+</body>
+</html>
