@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Girl's Simulation Game</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      <style>
+         body, html {
+    background: url("https://w0.peakpx.com/wallpaper/390/931/HD-wallpaper-anime-room-art-japan-original-house-japanese-anime-indoor-room.jpg");
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    color: cyan;
+}
+.container {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+    height: 80%;
+    padding: 20px;
+    background-color: transparent; /* Remove background color */
+}
+.left-column, .right-column {
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
+.left-column {
+    grid-column: 1 / 2;
+}
+.right-column {
+    grid-column: 2 / 3;
+}
+.attributes {
+    grid-row: 1 / 2;
+    width: 180px;
+}
+.calendar-container {
+    grid-row: 2 / 3;
+    height: 120px; /* Adjust height as desired */
+    width: 180px;
+}
+.girl-image-container {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.girl-gif-box {
+    position: absolute;
+    left: 400px;
+    width: 200px;
+    height: 200px;
+    background-color: transparent;
+}
+.activity-selector, .planned-activities, .text-box {
+    padding: 20px;
+    border: 2px solid whitesmoke;
+    border-radius: 10px;
+}
+.activity-selector {
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+    justify-self: end;
+}
+.planned-activities {
+    margin-top: 10px;
+    padding: 20px;
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+}
+.planned-activities li.fully-concentrated {
+    background-color: rgba(255, 255, 0, 0.5); /* Adjust color and transparency as desired */
+}
+.text-box {
+    grid-row: 3 / 4;
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px; 
+}
+.attributes ul {
+    padding-left: 0;
+}
+.attributes li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+.notification {
+    margin-top: 1px;
+}
+textarea {
+    width: calc(100% - 80px); /* Adjust width as desired */
+    height: calc(100% - 40px); /* Adjust height as desired */
+    border: 2px dashed cyan;
+    resize: none;
+    background-color: rgba(80, 61, 61, 0.8); /* Adjust transparency as desired */
+    margin: 10px 40px; /* Adjust margin as desired */
+    padding: 20px; /* Adjust padding as desired */
+    border-radius: 20px;
+    font-family: cursive;
+    font-weight: 200;
+    font-size: larger;
+    color: cyan;
+}
+.image {
+    position: absolute;
+    bottom: 15%;
+    width: 30%;
+    height: 30%;
+}
+      </style>
+      <script src="https://kit.fontawesome.com/dfa5850710.js" crossorigin="anonymous"></script>
+   </head>
+   <body>
+      <div id="app" class="container">
+         <!-- Attributes -->
+         <!-- Attributes -->
+         <div class="left-column attributes">
+            <h2><i class="fa-solid fa-child-reaching" style="color: pink;"></i> Attributes</h2>
+            <ul>
+               <!-- Replace text representation of health with heart icons -->
+               <li>
+                  Health: 
+                  <template v-for="heart in 5">
+                     <i v-if="heart <= hearts" class="fa-solid fa-heart"></i> <!-- Render solid hearts -->
+                     <i v-else class="fa-regular fa-heart"></i> <!-- Render regular hearts -->
+                  </template>
+               </li>
+               <!-- Use icons or emojis to represent morale -->
+               <li>Morale: <i :class="moraleIcon"></i></li>
+               <!--<li> Health: <span>{{ attributes.health }}</span></li>-->
+               <!--<li> Spirit: <span>{{ attributes.spirit }}</span></li>-->
+               <!--<li>Environment: <span>{{ attributes.environment }}</span></li>-->
+               <li><i class="fas fa-book"></i> Intelligence: <span>{{ attributes.intelligence }}</span></li>
+               <li><i class="fas fa-paint-brush"></i> Creativity: <span>{{ attributes.creativity }}</span></li>
+               <li><i class="fas fa-users"></i> Social Skills: <span>{{ attributes.socialSkills }}</span></li>
+               <li><i class="fas fa-dumbbell"></i> Physical Fitness: <span>{{ attributes.physicalFitness }}</span></li>
+            </ul>
+         </div>
+         <!-- Calendar -->
+         <div class="left-column calendar-container">
+            <h2><i class="far fa-calendar-alt"></i> Calendar</h2>
+            <p>Today is {{ currentDate }}</p>
+         </div>
+         <!-- Girl's Image -->
+         <div class="girl-image-container">
+            <div class="girl-gif-box"></div>
+            <img class="image" :src="currentImage" @contextmenu.shift.prevent="changeImage" @click="wake">
+         </div>
+         <!-- Activity Selector -->
+         <div class="right-column activity-selector">
+            <h2><i class="fas fa-cog"></i> Select Activity</h2>
+            <select v-model="selectedActivity">
+               <option value="">Select</option>
+               <option value="Study">Study</option>
+               <option value="Exercise">Exercise</option>
+               <option value="Socialize">Socialize</option>
+               <option value="Hobby">Hobby</option>
+               <option value="Housework">Housework</option>
+               <option value="Rest">Rest</option>
+            </select>
+            <input type="checkbox" id="fully-concentrated" v-model="fullyConcentrated">
+            <label for="fully-concentrated">Fully Concentrated?</label>
+            <br>
+            <div>
+               <select v-model="selectedTime">
+                  <option value="">Select Time</option>
+                  <option value="Morning">Morning</option>
+                  <option value="Afternoon">Afternoon</option>
+                  <option value="Evening">Evening</option>
+                  <option value="Night">Night</option>
+               </select>
+               <button @click="planActivity">Plan Activity</button>
+            </div>
+            <!-- Planned Activities -->
+            <div class="right-column planned-activities">
+               <h2><i class="fas fa-tasks"></i> Planned Activities</h2>
+               <ul>
+                  <li v-for="(activity, index) in plannedActivities" :key="index" :class="{ 'fully-concentrated': activity.fullyConcentrated }">{{ activity.text }}</li>
+               </ul>
+               <br>
+               <button @click="confirmActivities">Confirm</button>
+               <button @click="seeDoctor">See doctor</button>
+               <button @click="Intervention">Intervention </button>
+            </div>
+         </div>
+         <!-- Text Box for notification -->
+         <div class="text-box">
+            <h2><i class="fas fa-bell"></i> Notifications</h2>
+            <textarea @click="wake" readonly>{{ notification }}</textarea>
+         </div>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+      <script>
+         new Vue({
+           el: '#app',
+           data() {
+             return {
+               attributes: {
+               health: 100,
+               spirit: 50,
+               environment: 50,
+               morale: 'happy',
+               intelligence: 50,
+               creativity: 50,
+               socialSkills: 50,
+               physicalFitness: 50,
+             },
+             
+             wakeUp:false,
+             gameOver: false,
+             selectedActivity: '',
+             selectedTime: '',
+             fullyConcentrated: false,
+             plannedActivities: [],
+             notification: "We've got 10 days until the big challenge ahead. Your task is to boost your intelligence, creativity, social skills, and physical fitness to over 100. Succeed, and we'll be traveling the world. Plan your activities wisely!",
+             happy_message: "Good morning! How's your day shaping up? I'm feeling pretty good myself. Any plans for today?",
+             excited_message: "Hey there! I woke up bursting with energy. Got any suggestions for what I should do today?",
+             sad_message: "Hi, what's up? Feeling a bit down today.",
+             ill_message: "Sorry, I'm not feeling well. Mind if I do not join in any acitivity today?",
+             angry_message: "Leave me alone! Not in the mood for anything right now.",
+             death_message: "Sorry, looks like I won't be around anymore...",
+             checking_message: "The challenge day is here! Let's see how far we've come.",
+             transition_message:"A busy day passed",
+             currentDate: '',
+             imageSet: 'normal', // Default to normal image set
+             imageIndex: 1, // Default to first image
+             };
+           },
+           computed: {
+            
+         currentImage() {
+           return `images/${this.imageSet}${this.imageIndex}.png`;
+         },
+         hearts() {
+           return Math.floor(this.attributes.health / 40);
+         },
+         
+         // Compute the class for the morale icon based on the current morale state
+         moraleIcon(){
+           switch (this.attributes.morale) {
+             case 'excited':
+               return 'fa-solid fa-face-laugh-squint';
+         
+             case 'happy':
+               return 'fa-solid fa-face-smile';
+             case 'ill':
+               return 'fa-solid fa-face-dizzy';
+             case 'sad':
+               return 'fa-solid fa-face-frown';
+             case 'angry':
+               return 'fa-solid fa-face-tired';
+             default:
+               return '';
+           }
+         }
+         },
+         
+         created() {
+         this.currentDate = "Date 1";
+         this.currentDateNumber = parseInt(this.currentDate.split(' ')[1]);
+         
+         },
+           
+           methods: {
+          
+         
+        seeDoctor(){
+               if(this.attributes.health<=20)
+               this.attributes.health += 80;
+                this.attributes.spirit += 20;
+               this.notification = `After having some medicine and rest, Health: ${this.attributes.health}, Spirit: ${this.attributes.spirit}. Click to update it.`;
+               const currentDateNumber = parseInt(this.currentDate.split(' ')[1]);
+           if (currentDateNumber < 10) {
+               this.currentDate = `Date ${currentDateNumber + 1}`;
+               this.wakeUp = false;
+           }
+           setTimeout(() => {
+           this.notification = this.transition_message;
+         }, 5000); 
+             },
+             Intervention(){
+               if(this.attributes.spirit <= 0)
+               this.attributes.spirit += 60;
+                this.attributes.health += 40;
+               this.notification = `After a long talk, Health: ${this.attributes.health}, Spirit: ${this.attributes.spirit}. Click to update it.`;
+               const currentDateNumber = parseInt(this.currentDate.split(' ')[1]);
+           if (currentDateNumber < 10) {
+               this.currentDate = `Date ${currentDateNumber + 1}`;
+               this.wakeUp = false;
+           }
+           setTimeout(() => {
+           this.notification = this.transition_message;
+         }, 5000); 
+             },
+             playDeathGIF() {
+               const gifBox = document.querySelector('.girl-gif-box');
+               gifBox.innerHTML = ''; // Clear the gif box
+         
+               const gif = document.createElement('img');
+               gif.src = 'gif/death.gif';
+               gifBox.appendChild(gif);
+         
+               setTimeout(() => {
+                 gif.style.display = 'none'; // Hide the gif
+                 this.changeBackground(); // Call the changeBackground function here
+               }, 7000);
+             },
+             playcryGIF() {
+               const gifBox = document.querySelector('.girl-gif-box');
+               gifBox.innerHTML = ''; // Clear the gif box
+         
+               const gif = document.createElement('img');
+               gif.src = 'gif/cry.gif';
+               gifBox.appendChild(gif);
+         
+               setTimeout(() => {
+                 gif.style.display = 'none'; // Hide the gif
+                  // Call the changeBackground function here
+               }, 3000);
+             },
+             playprotestGIF() {
+               const gifBox = document.querySelector('.girl-gif-box');
+               gifBox.innerHTML = ''; // Clear the gif box
+         
+               const gif = document.createElement('img');
+               gif.src = 'gif/protest.gif';
+               gifBox.appendChild(gif);
+         
+               setTimeout(() => {
+                 gif.style.display = 'none'; // Hide the gif
+                  // Call the changeBackground function here
+               }, 3000);
+             },
+         
+             changeBackground() {
+               const appContainer = document.getElementById('app');
+               const elements = appContainer.querySelectorAll('*');
+               elements.forEach(element => {
+                 element.style.display = 'none';
+               });
+         
+               // Change the background
+               if (this.gameOver) {
+                 document.body.style.backgroundImage = 'url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/bb813bfd-69b8-45fc-9bb5-a4cc04474959/deki2tr-c3619734-9557-4ff3-8903-36289466d72a.jpg/v1/fit/w_800,h_450,q_70,strp/grave_by_wyne219_deki2tr-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NDUwIiwicGF0aCI6IlwvZlwvYmI4MTNiZmQtNjliOC00NWZjLTliYjUtYTRjYzA0NDc0OTU5XC9kZWtpMnRyLWMzNjE5NzM0LTk1NTctNGZmMy04OTAzLTM2Mjg5NDY2ZDcyYS5qcGciLCJ3aWR0aCI6Ijw9ODAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.7yPkqE1xnCIeRtM5uEp7Dddif82rOw7TS7HIVtxV0Xs")';
+               } 
+               document.body.style.backgroundSize = 'cover';
+               
+             },
+         
+             environmentChange(){
+               //console.log("environment:", this.attributes.environment)
+               if(this.environment <= 10){
+                 this.attributes.sprite -= 10;
+                 this.attributes.health -= 10;
+               }
+             },
+            // Define the checkingDeath() method
+checkingDeath() {
+    if (this.attributes.health <= 0) {
+        this.attributes.health = 0;
+        this.gameOver = true; // Set gameOver to true when health reaches 0
+        this.playDeathGIF(); // Play death GIF
+        this.notification = this.death_message;
+        return true; // Return true to indicate game over
+    }
+    return false; // Return false if game over condition is not met
+},
+
+// Update the wake() method
+wake() {
+    // Increment currentDate until Date 10
+    if (this.currentDateNumber > 10) {
+        // After day 10, check for best/worst ending
+        if (this.checkingDeath()) {
+            return; // Exit the method since the game is over
+        }
+        this.checkEnding();
+    } else {
+        // Check if the player is waking up
+        if (!this.wakeUp) {
+            this.wakeUp = true;
+            // console.log("Health:", this.attributes.health);
+        }
+
+        // Check game over condition by calling checkingDeath() function
+        if (this.checkingDeath()) {
+            return; // Exit the method since the game is over
+        }
+
+        // Other conditions for morale and notifications
+        if (this.attributes.health >= 0 && this.attributes.health < 20) {
+            this.attributes.morale = 'ill';
+            this.notification = this.ill_message;
+        } else if (this.attributes.spirit < 0) {
+            this.attributes.morale = 'angry';
+            this.notification = this.angry_message;
+        } else if (this.attributes.spirit >= 0 && this.attributes.spirit < 40) {
+            this.attributes.morale = 'sad';
+            this.notification = this.sad_message;
+        } else if (this.attributes.spirit > 100) {
+            this.attributes.morale = 'excited';
+            this.notification = this.excited_message;
+        } else {
+            this.attributes.morale = 'happy';
+            this.notification = this.happy_message;
+        }
+        this.imageChange();
+    }
+},
+
+         
+             imageChange(){
+              // console.log('Image change computed property called');
+               if(this.attributes.morale == 'ill'){
+                 this.imageSet = 'ill';
+               }
+               else if (this.attributes.morale == 'angry'){
+                 this.imageSet = 'sad';
+               }
+               else{
+                 this.imageSet = 'normal';
+               }
+             },
+         
+             changeImage(event) {
+           // Prevent default context menu
+           event.preventDefault();
+           // Check if right click
+           if (event.button === 2) {
+             // Increment image index or loop back to 1 if reached the end
+             this.imageIndex = this.imageIndex === 4 ? 1 : this.imageIndex + 1;
+           }
+         },
+         planActivity() {
+           // Check if an activity is already planned for the selected time
+            // Require clicking on the textarea before planning activities
+            if (!this.wakeUp) {
+               this.notification = 'Please wake up her by clicking on the image first.';
+               return;
+           }
+         
+           if (this.selectedActivity && this.selectedTime && !this.plannedActivities.some(activity => activity.time === this.selectedTime)) {
+             const activity = {
+               text: `${this.selectedTime}: ${this.selectedActivity}`,
+               time: this.selectedTime,
+               fullyConcentrated: this.fullyConcentrated
+             };
+             this.plannedActivities.push(activity);
+             this.selectedActivity = '';
+             this.selectedTime = '';
+             this.fullyConcentrated = false;
+             this.notification = 'Activity planned successfully.';
+           } else {
+             this.notification = 'Please select activity, time, and ensure you have not planned more than one activity for the same time zone.';
+           }
+         },
+         
+         confirmActivities() {
+            
+           // Require clicking on the textarea before planning activities
+           if (!this.wakeUp) {
+               this.notification = 'Please wake up her by clicking on the image first.';
+               return;
+           }
+           // Check if less than 4 activities are planned
+           if (this.plannedActivities.length < 4) {
+               // Prompt the user to add a rest activity
+               if (confirm('Do you want to add a rest activity?')) {
+                   // Add a rest activity for the vacant time slot
+                   const vacantTimeSlots = ['Morning', 'Afternoon', 'Evening', 'Night'].filter(slot => !this.plannedActivities.some(activity => activity.time === slot));
+                   if (vacantTimeSlots.length > 0) {
+                       this.plannedActivities.push({
+                           text: `${vacantTimeSlots[0]}: Rest`,
+                           time: vacantTimeSlots[0],
+                           fullyConcentrated: false
+                       });
+                   }
+               }else {
+                   // User canceled, allow reselecting activities without running the function
+                   return;
+               }
+           }
+           // Clear the notification
+           this.notification = '';
+           this.attributes.environment -= 10;
+           this.environmentChange();
+         
+           // Play GIFs based on planned activities
+           if (this.attributes.morale !== 'ill' && this.attributes.morale !== 'angry') {
+               this.playGIFs()
+                   .then(() => {
+                       // Update attributes based on the planned activities
+                       this.plannedActivities.forEach(activity => {
+                           let increaseFactor = 1;
+                           if (activity.fullyConcentrated) {
+                               increaseFactor = 1 + Math.random();
+                           }
+                           switch (activity.text.split(': ')[1]) {
+                               case 'Study':
+                                    this.checkingDeath();
+                                   this.attributes.intelligence += Math.floor(this.attributes.creativity * increaseFactor/10);
+                                   this.attributes.health = Math.max(this.attributes.health - Math.floor(20*increaseFactor), 0);
+                                   this.attributes.spirit -= Math.ceil(12 * increaseFactor);
+                                   console.log("intelligence:", this.attributes.intelligence);
+                                   break;
+                               case 'Exercise':
+                                this.checkingDeath();
+                                   this.attributes.physicalFitness += Math.ceil(5 * increaseFactor);
+                                   this.attributes.health = Math.max(this.attributes.health - Math.floor(25*increaseFactor), 0);
+                                   this.attributes.spirit -= Math.ceil((75 - this.attributes.socialSkills)* increaseFactor/5 );
+                                   console.log("physicalFitness:", this.attributes.physicalFitness);
+                                   console.log("health:", this.attributes.health);
+                                   break;
+                               case 'Socialize':
+                                this.checkingDeath();
+                                   this.attributes.socialSkills += Math.ceil(5 * increaseFactor);
+                                   this.attributes.health = Math.max(this.attributes.health - Math.floor(20*increaseFactor), 0);
+                                   this.attributes.spirit -= Math.ceil((75 - this.attributes.intelligence)/(3 * increaseFactor));
+                                   console.log("socialSkills:", this.attributes.socialSkills);
+                                   break;
+                               case 'Hobby':
+                                this.checkingDeath();
+                                   this.attributes.creativity += Math.ceil(5 * increaseFactor);
+                                   this.attributes.health = Math.max(this.attributes.health - Math.floor(20*increaseFactor), 0);
+                                   this.attributes.spirit += Math.ceil(5 * increaseFactor);
+                                   this.attributes.physicalFitness -= Math.ceil(1* increaseFactor);
+                                   this.attributes.socialSkills -= Math.floor(2 * increaseFactor);
+                                   console.log("creativity:", this.attributes.creativity);
+                                   break;
+                               case 'Housework':
+                                this.checkingDeath();
+                                   this.attributes.environment += 50;
+                                   this.attributes.health = Math.max(this.attributes.health - 20, 0);
+                                   this.attributes.spirit -= (75 - this.attributes.creativity);
+
+                                   break;
+                               case 'Rest':
+                                this.checkingDeath();
+                                   this.attributes.health = Math.min(this.attributes.health + this.attributes.physicalFitness, 200);
+                                   this.attributes.spirit += 20 ;
+                                   break;
+                               default:
+                                   break;
+                           }
+                           // Update notification with attribute changes
+                           if(!this.checkingDeath()){
+                           this.notification += `After ${activity.text}, Intelligence: ${this.attributes.intelligence}, Social skill: ${this.attributes.socialSkills}, Creavity: ${this.attributes.creativity}, Physical Fitness: ${this.attributes.physicalFitness}.`};
+                       });
+         
+                       // Clear planned activities
+                       this.plannedActivities = [];
+                         // Increment currentDateNumber
+                       this.currentDateNumber += 1;
+                       this.currentDate = `Date ${this.currentDateNumber}`;
+                       setTimeout(() => {
+           this.notification = this.transition_message;
+         }, 5000); 
+         this.wakeUp = false;           
+                   });
+           } else {
+               // The girl is ill or angry, play corresponding GIFs and update attributes accordingly
+               if (this.attributes.morale === 'ill') {
+                   this.playcryGIF();
+                   this.attributes.spirit -= 10;
+                   this.notification += `The girl is ill and cannot perform planned activities. `;
+               } else if (this.attributes.morale === 'angry') {
+                   this.playprotestGIF();
+                   this.attributes.spirit -= 10;
+                   this.notification += `The girl is angry and cannot perform planned activities. `;
+               }
+           }
+         },
+         
+         
+         checkEnding() {
+           this.notification = this.checking_message;
+           let over100Count = 0;
+           if (this.attributes.intelligence >= 100) over100Count++;
+           if (this.attributes.creativity >= 100) over100Count++;
+           if (this.attributes.socialSkills >= 100) over100Count++;
+           if (this.attributes.physicalFitness >= 100) over100Count++;
+         
+           let endingImages = [];
+           let endingWords = '';
+           switch (over100Count) {
+               case 4:
+                   endingImages = ['travel1.png', 'travel2.png', 'travel3.png', 'travel4.png'];
+                   endingWords = ' Congratulations! You achieved excellence in all aspects, and you are rewarded with the opportunity to travel the world!';
+                   // Show ending images and words
+                   setTimeout(() => {
+                       this.showEnding(endingImages, endingWords);
+                   }, 3000);
+                   break;
+               case 3:
+                   endingImages = ['travel1.png', 'travel2.png', 'travel3.png'];
+                   endingWords = ' You made significant progress in most areas, earning the chance to explore exciting destinations!';
+                   // Show ending images and words
+                   setTimeout(() => {
+                       this.showEnding(endingImages, endingWords);
+                   }, 3000);
+                   break;
+               case 2:
+                   endingImages = ['travel1.png', 'travel2.png'];
+                   endingWords = ' While you didn\'t excel in all areas, your accomplishments are recognized, and you can enjoy a well-deserved vacation!';
+                   // Show ending images and words
+                   setTimeout(() => {
+                       this.showEnding(endingImages, endingWords);
+                   }, 3000);
+                   break;
+               case 1:
+                   endingImages = ['travel1.png'];
+                   endingWords = ' Although there is room for improvement, your efforts have paid off, and you can embark on a journey to unwind and recharge!';
+                   // Show ending images and words
+                   setTimeout(() => {
+                       this.showEnding(endingImages, endingWords);
+                   }, 3000);
+                   break;
+               default:
+                   // Play failure GIFs one by one
+                   endingImages = ['study0.gif', 'exercise0.gif', 'socialize0.gif', 'hobby0.gif'];
+                   endingWords = ' Unfortunately, you did not quite meet the goals this time. But do not worry, there is always another chance! This holiday, let us work hard to fill in those gaps. Good luck!';
+                   setTimeout(() => {
+                       this.playFailureGIFs(endingImages, endingWords);
+                   }, 3000);
+                   break;;
+           }
+         },
+         
+         
+         playFailureGIFs(gifs, words) {
+           let index = 0;
+           this.notification = words;
+           const interval = setInterval(() => {
+               if (index < gifs.length) {
+                   const gifBox = document.querySelector('.girl-gif-box');
+                   gifBox.innerHTML = ''; // Clear the gif box
+         
+                   const gif = document.createElement('img');
+                   gif.src = `gif/${gifs[index]}`;
+                   gifBox.appendChild(gif);
+         
+                   index++;
+                   
+               } else {
+                   clearInterval(interval);
+                   // Display words
+               }
+           }, 3000); // Show each GIF for 3 seconds
+         },
+         
+         showEnding(images, words) {
+           // Display images one by one
+           let index = 0;
+           this.notification = words;
+           const interval = setInterval(() => {
+               // Display image
+               if (index < images.length) {
+                   document.querySelector('.image').src = `gif/${images[index]}`;
+                   index++;
+               } else {
+                   clearInterval(interval);
+                   // Display words after showing all images
+               }
+           }, 3000); // Show each image for 3 seconds
+         },
+         
+         
+         
+         playGIFs() {
+           const gifBox = document.querySelector('.girl-gif-box');
+           gifBox.innerHTML = ''; // Clear the gif box
+         
+           const playGIF = (activity) => {
+               console.log('Playing GIF:', activity.text);
+               return new Promise((resolve, reject) => {
+                   const gif = document.createElement('img');
+                   gif.src = `gif/${activity.text.toLowerCase().split(': ')[1].split(' ')[0]}1.gif`; // Assuming the GIF filenames follow the convention: activity1.gif
+                   gifBox.appendChild(gif);
+         
+                   setTimeout(() => {
+                       gif.style.display = 'none'; // Hide the gif
+                       resolve(); // Resolve the promise after 5 seconds
+                   }, 3000);
+               });
+           };
+         
+           // Chain promises to play each GIF sequentially
+           return this.plannedActivities.reduce((promiseChain, activity) => {
+               return promiseChain.then(() => {
+                   return playGIF(activity);
+               });
+           }, Promise.resolve());
+         },
+         
+         
+         watch: {
+           'attributes.health': {
+             handler() {
+               this.wake();
+             this.imageChange();
+             }
+           }
+         }
+           }
+         
+         
+         });
+      </script>
+   </body>
+</html>
