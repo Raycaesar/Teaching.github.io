@@ -77,14 +77,7 @@
 .planned-activities li.fully-concentrated {
     background-color: rgba(255, 255, 0, 0.5); /* Adjust color and transparency as desired */
 }
-.text-box {
-    grid-row: 3 / 4;
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 250px; 
-}
+
 .attributes ul {
     padding-left: 0;
 }
@@ -92,9 +85,7 @@
     list-style: none;
     margin-bottom: 10px;
 }
-.notification {
-    margin-top: 1px;
-}
+
 textarea {
     width: calc(100% - 80px); /* Adjust width as desired */
     height: calc(100% - 40px); /* Adjust height as desired */
@@ -109,12 +100,31 @@ textarea {
     font-size: larger;
     color: cyan;
 }
+.notification {
+    margin-top: 1px;
+}
+
+.text-box {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20%; /* Adjust height as needed */
+    background-color: rgba(80, 61, 61, 0.8); /* Adjust transparency as desired */
+    padding: 20px; /* Adjust padding as desired */
+    border-radius: 20px;
+}
+
 .image {
     position: absolute;
-    bottom: 25%;
+    bottom: 20%; /* Same as the height of .text-box */
+    left: 35%; /* Adjust positioning as needed */
     width: 30%;
     height: 30%;
 }
+
       </style>
       <script src="https://kit.fontawesome.com/dfa5850710.js" crossorigin="anonymous"></script>
    </head>
@@ -523,7 +533,7 @@ wake() {
                                 this.checkingDeath();
                                    this.attributes.socialSkills += Math.ceil(5 * increaseFactor);
                                    this.attributes.health = Math.max(this.attributes.health - Math.floor(20*increaseFactor), 0);
-                                   this.attributes.spirit -= Math.ceil((75 - this.attributes.intelligence)/(3 * increaseFactor));
+                                   this.attributes.spirit -= Math.ceil((75 - this.attributes.intelligence)/(2 * increaseFactor));
                                    console.log("socialSkills:", this.attributes.socialSkills);
                                    break;
                                case 'Hobby':
@@ -531,7 +541,7 @@ wake() {
                                    this.attributes.creativity += Math.ceil(5 * increaseFactor);
                                    this.attributes.health = Math.max(this.attributes.health - Math.floor(20*increaseFactor), 0);
                                    this.attributes.spirit += Math.ceil(5 * increaseFactor);
-                                   this.attributes.physicalFitness -= Math.ceil(1* increaseFactor);
+                                   this.attributes.physicalFitness -= Math.ceil(2* increaseFactor);
                                    this.attributes.socialSkills -= Math.floor(2 * increaseFactor);
                                    console.log("creativity:", this.attributes.creativity);
                                    break;
