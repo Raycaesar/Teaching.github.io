@@ -315,7 +315,7 @@ class Effect {
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.particles = [];
-        this.numberOfParticles = 10;
+        this.numberOfParticles = 100;
         this.createParticles();
         this.score = 0;
         this.explosions = [];
